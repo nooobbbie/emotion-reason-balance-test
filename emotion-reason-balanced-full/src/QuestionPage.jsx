@@ -1,4 +1,4 @@
-// 감정-이성 균형 테스트 전체 코드 + 카카오톡 공유 버튼 적용 (트위터 제거)
+// 감정-이성 균형 테스트 전체 코드 (공유 기능 제거됨)
 
 import React, { useState, useEffect } from 'react';
 
@@ -39,13 +39,6 @@ const ogImageMap = {
   '내면의 전장 (충돌형)': '/og_conflict.png'
 };
 
-const shareMessages = {
-  '공감의 거울 (감정우세형)': '나는 감정이 풍부한 "공감의 거울" 유형이래. 너도 한번 테스트 해봐!',
-  '논리의 조율자 (이성우세형)': '나는 이성적인 사고가 강한 "논리의 조율자" 유형이래. 당신은 어떤 유형일까?',
-  '조화의 탐구자 (균형형)': '나는 감정과 이성이 조화를 이루는 "조화의 탐구자" 유형이래. 너는 어떤 유형일까?',
-  '내면의 전장 (충돌형)': '나는 내 안의 감정과 이성이 충돌하고 있는 "내면의 전장" 유형이래. 당신은 어떤가요?'
-};
-
 const QuestionPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(0));
@@ -59,12 +52,6 @@ const QuestionPage = () => {
       }
     }
   }, [result]);
-
-  useEffect(() => {
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init("0495ffcfffd56262a7c59ce90666c3d7");
-    }
-  }, []);
 
   const handleSelect = (score) => {
     const newAnswers = [...answers];
@@ -107,31 +94,6 @@ const QuestionPage = () => {
     setResult({ emotionScore, reasonScore, resultType });
   };
 
-  const handleShare = () => {
-    const message = shareMessages[result.resultType] || '감정과 이성의 균형을 알아보세요👇';
-    window.Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: '감정과 이성의 균형 테스트',
-        description: message,
-        imageUrl: window.location.origin + ogImageMap[result.resultType],
-        link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
-        },
-      },
-      buttons: [
-        {
-          title: '테스트 하러 가기',
-          link: {
-            mobileWebUrl: window.location.origin,
-            webUrl: window.location.origin,
-          },
-        },
-      ],
-    });
-  };
-
   if (result) {
     return (
       <div className="max-w-xl mx-auto p-6 text-center">
@@ -148,12 +110,6 @@ const QuestionPage = () => {
         <p className="text-base italic text-gray-700 mb-6">{nextSteps[result.resultType]}</p>
 
         <div className="flex justify-center gap-4 mb-6">
-          <button
-            onClick={handleShare}
-            className="px-4 py-2 bg-yellow-400 text-black rounded shadow hover:bg-yellow-500"
-          >
-            카카오톡으로 공유하기
-          </button>
           <button
             onClick={() => {
               setCurrentIndex(0);
