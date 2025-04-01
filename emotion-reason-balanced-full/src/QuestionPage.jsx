@@ -108,7 +108,15 @@ const QuestionPage = () => {
       <div className="max-w-xl mx-auto p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">당신의 결과는...</h2>
         <p className="text-xl mb-2">{result.resultType}</p>
-        <p className="text-sm text-gray-500 mb-6">(감정 점수: {result.emotionScore}, 이성 점수: {result.reasonScore})</p>
+        <p className="text-sm text-gray-500 mb-2">(감정 점수: {result.emotionScore}, 이성 점수: {result.reasonScore})</p>
+
+        {/* ✅ 결과 유형 이미지 */}
+        <img
+          src={ogImageMap[result.resultType]}
+          alt="결과 유형 이미지"
+          className="mx-auto my-4 rounded-xl shadow max-w-full"
+        />
+
         <p className="text-base italic text-gray-700 mb-6">{nextSteps[result.resultType]}</p>
 
         <div className="flex justify-center gap-4 mb-6">
