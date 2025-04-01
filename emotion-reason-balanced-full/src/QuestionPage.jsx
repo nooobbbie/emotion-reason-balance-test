@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// 감정-이성 균형 테스트 전체 코드 + 결과 유형별 OG 이미지 파일 적용 안내 포함
+
+import React, { useState, useEffect } from 'react';
 
 const questions = [
   { id: 1, text: "나는 타인의 기분 변화를 빠르게 알아차리는 편이다.", type: "emotion" },
@@ -23,10 +25,38 @@ const questions = [
   { id: 20, text: "나는 문제를 해결할 때 감정은 최대한 배제하려 한다.", type: "reason" }
 ];
 
+];
+
+const nextSteps = {
+  '공감의 거울 (감정우세형)': '감정은 당신의 언어입니다. 그러나 그 언어가 길을 잃지 않도록, 당신만의 기준을 세워보세요.',
+  '논리의 조율자 (이성우세형)': '이성은 분명한 빛입니다. 그러나 감정이라는 그늘이 없다면 세상은 입체감을 잃습니다. 균형을 위해 감정의 숨결을 들어보세요.',
+  '조화의 탐구자 (균형형)': '균형은 멈춤이 아닌 지속적인 조율입니다. 지금의 조화를 믿되, 계속해서 자신을 살펴보세요.',
+  '내면의 전장 (충돌형)': '당신은 격류 속에 있습니다. 감정과 이성 어느 한 편도 포기하지 않기에 괴로운 당신은, 진실에 가장 가까운 위치에 있을 수 있습니다.'
+};
+
+const ogImageMap = {
+  '공감의 거울 (감정우세형)': '/og_emotion.png',
+  '논리의 조율자 (이성우세형)': '/og_reason.png',
+  '조화의 탐구자 (균형형)': '/og_balanced.png',
+  '내면의 전장 (충돌형)': '/og_conflict.png'
+};
+
 const QuestionPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(0));
   const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    if (result) {
+      console.log("[RESULT SUBMIT]", result.resultType);
+
+      // 동적으로 OG 태그 이미지 설정 (client-side용)
+      const og = document.querySelector('meta[property="og:image"]');
+      if (og && ogImageMap[result.resultType]) {
+        og.setAttribute('content', ogImageMap[result.resultType]);
+      }
+    }
+  }, [result]);
 
   const handleSelect = (score) => {
     const newAnswers = [...answers];
@@ -61,7 +91,7 @@ const QuestionPage = () => {
     const difference = emotionScore - reasonScore;
     let resultType = '';
 
-    if (emotionScore >= 60 && reasonScore >= 60) resultType = '내면의 전장 (충돌형)';
+    if (emotionScore >= 40 && reasonScore >= 40) resultType = '내면의 전장 (충돌형)';
     else if (Math.abs(difference) <= 5) resultType = '조화의 탐구자 (균형형)';
     else if (emotionScore > reasonScore) resultType = '공감의 거울 (감정우세형)';
     else resultType = '논리의 조율자 (이성우세형)';
@@ -69,18 +99,52 @@ const QuestionPage = () => {
     setResult({ emotionScore, reasonScore, resultType });
   };
 
+  const handleShare = () => {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(`나는 "${result.resultType}" 유형이래! 감정과 이성의 균형을 알아보세요👇`);
+    const shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+    window.open(shareUrl, '_blank');
+  };
+
   if (result) {
     return (
       <div className="max-w-xl mx-auto p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">당신의 결과는...</h2>
         <p className="text-xl mb-2">{result.resultType}</p>
-        <p className="text-sm text-gray-500">(감정 점수: {result.emotionScore}, 이성 점수: {result.reasonScore})</p>
+        <p className="text-sm text-gray-500 mb-6">(감정 점수: {result.emotionScore}, 이성 점수: {result.reasonScore})</p>
+        <p className="text-base italic text-gray-700 mb-6">{nextSteps[result.resultType]}</p>
+
+        <div className="flex justify-center gap-4 mb-6">
+          <button
+            onClick={handleShare}
+            className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600"
+          >
+            결과 공유하기
+          </button>
+          <button
+            onClick={() => {
+              setCurrentIndex(0);
+              setAnswers(Array(questions.length).fill(0));
+              setResult(null);
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
+          >
+            다시 테스트하기
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="max-w-xl mx-auto p-6">
+      {currentIndex === 0 && (
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold mb-2">감정과 이성의 균형을 찾아서</h1>
+          <p className="text-gray-600 text-base">당신의 내면은 어디쯤에 머무르고 있나요?</p>
+        </div>
+      )}
+
       <h2 className="text-lg text-gray-600 mb-2">문항 {currentIndex + 1} / {questions.length}</h2>
       <div className="bg-white rounded-xl shadow p-6 mb-4">
         <p className="text-xl font-medium mb-4">{questions[currentIndex].text}</p>
@@ -98,9 +162,7 @@ const QuestionPage = () => {
       </div>
       <div className="flex justify-between">
         <button onClick={prevQuestion} className="px-4 py-2 bg-gray-200 rounded">이전</button>
-        <button onClick={nextQuestion} className="px-4 py-2 bg-blue-500 text-white rounded">
-          {currentIndex === questions.length - 1 ? '결과 보기' : '다음'}
-        </button>
+        <button onClick={nextQuestion} className="px-4 py-2 bg-blue-500 text-white rounded">{currentIndex === questions.length - 1 ? '결과 보기' : '다음'}</button>
       </div>
     </div>
   );
