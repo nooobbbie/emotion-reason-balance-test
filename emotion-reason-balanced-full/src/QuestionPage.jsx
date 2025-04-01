@@ -1,4 +1,4 @@
-// 감정-이성 균형 테스트 전체 코드 + 결과 유형별 OG 이미지 파일 적용 안내 포함
+// 감정-이성 균형 테스트 전체 코드 + 결과 유형별 OG 이미지 파일 적용 안내 포함 (파일명 언더스코어로 변경)
 
 import React, { useState, useEffect } from 'react';
 
@@ -48,7 +48,6 @@ const QuestionPage = () => {
     if (result) {
       console.log("[RESULT SUBMIT]", result.resultType);
 
-      // 동적으로 OG 태그 이미지 설정 (client-side용)
       const og = document.querySelector('meta[property="og:image"]');
       if (og && ogImageMap[result.resultType]) {
         og.setAttribute('content', ogImageMap[result.resultType]);
