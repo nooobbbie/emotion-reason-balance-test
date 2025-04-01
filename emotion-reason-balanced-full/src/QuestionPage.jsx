@@ -74,6 +74,13 @@ const reinforceLabels = {
   '내면의 전장 (충돌형)': '내면 통합하기'
 };
 
+const ogImageMap = {
+  '공감의 거울 (감정우세형)': '/og_emotion.png',
+  '논리의 조율자 (이성우세형)': '/og_reason.png',
+  '조화의 탐구자 (균형형)': '/og_balanced.png',
+  '내면의 전장 (충돌형)': '/og_conflict.png'
+};
+
 const QuestionPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(0));
@@ -130,6 +137,9 @@ const QuestionPage = () => {
   };
 
   if (result) {
+    const contents = recommendedContents[result.resultType];
+    const label = reinforceLabels[result.resultType];
+
     return (
       <div className="max-w-xl mx-auto p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">당신의 결과는...</h2>
@@ -144,20 +154,23 @@ const QuestionPage = () => {
 
         <p className="text-base italic text-gray-700 mb-6">{nextSteps[result.resultType]}</p>
 
-        {/* 추천 콘텐츠 */}
-        <div className="bg-gray-50 rounded-xl p-4 shadow-inner mb-6 text-left">
-          <h3 className="text-lg font-semibold mb-2 text-center"> 당신을 위한 추천 콘텐츠</h3>
-          <ul className="list-disc list-inside space-y-1">
-            {recommendedContents[result.resultType].map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-          <div className="text-center mt-4">
-            <button className="px-4 py-2 bg-emerald-500 text-white rounded hover:bg-emerald-600">
-              {reinforceLabels[result.resultType]} 위한 콘텐츠 보기
-            </button>
+        {contents && (
+          <div className="bg-gray-50 rounded-xl p-4 shadow-inner mb-6 text-left">
+            <h3 className="text-lg font-semibold mb-2 text-center">🎯 당신을 위한 추천 콘텐츠</h3>
+            <ul className="list-disc list-inside space-y-1">
+              {contents.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+            {label && (
+              <div className="text-center mt-4">
+                <button className="px-4 py-2 bg-emerald-500 text-white rounded hover:bg-emerald-600">
+                  {label} 위한 콘텐츠 보기
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         <div className="flex justify-center gap-4 mb-6">
           <button
