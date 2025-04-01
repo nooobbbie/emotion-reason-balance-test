@@ -25,6 +25,12 @@ const questions = [
   { id: 20, text: "나는 문제를 해결할 때 감정은 최대한 배제하려 한다.", type: "reason" }
 ];
 
+import React, { useState, useEffect } from 'react';
+
+const questions = [
+  // ... (생략: 동일)
+];
+
 const nextSteps = {
   '공감의 거울 (감정우세형)': '감정은 당신의 언어입니다. 그러나 그 언어가 길을 잃지 않도록, 당신만의 기준을 세워보세요.',
   '논리의 조율자 (이성우세형)': '이성은 분명한 빛입니다. 그러나 감정이라는 그늘이 없다면 세상은 입체감을 잃습니다. 균형을 위해 감정의 숨결을 들어보세요.',
@@ -65,13 +71,6 @@ const recommendedContents = {
     '🌫️ 그림자 글쓰기: 숨기고 싶은 감정 3가지를 글로 적기',
     '🔄 혼란 다이어그램 만들기: 지금 내 안의 감정/이성 지도 그리기'
   ]
-};
-
-const reinforceLabels = {
-  '공감의 거울 (감정우세형)': '이성을 더 키우기',
-  '논리의 조율자 (이성우세형)': '감정을 더 키우기',
-  '조화의 탐구자 (균형형)': '균형 유지하기',
-  '내면의 전장 (충돌형)': '내면 통합하기'
 };
 
 const ogImageMap = {
@@ -138,7 +137,6 @@ const QuestionPage = () => {
 
   if (result) {
     const contents = recommendedContents[result.resultType];
-    const label = reinforceLabels[result.resultType];
 
     return (
       <div className="max-w-xl mx-auto p-6 text-center">
@@ -162,13 +160,6 @@ const QuestionPage = () => {
                 <li key={index}>{item}</li>
               ))}
             </ul>
-            {label && (
-              <div className="text-center mt-4">
-                <button className="px-4 py-2 bg-emerald-500 text-white rounded hover:bg-emerald-600">
-                  {label} 위한 콘텐츠 보기
-                </button>
-              </div>
-            )}
           </div>
         )}
 
