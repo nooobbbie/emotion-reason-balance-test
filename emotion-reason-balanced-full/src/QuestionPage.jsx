@@ -1,6 +1,6 @@
 // 감정-이성 균형 테스트 전체 코드 (공유 기능 제거됨)
 
-import React, { useState, useEffect } from 'react';
+import React, /{ useState, useEffect } from 'react';
 
 const questions = [
   { id: 1, text: "나는 타인의 기분 변화를 빠르게 알아차리는 편이다.", type: "emotion" },
