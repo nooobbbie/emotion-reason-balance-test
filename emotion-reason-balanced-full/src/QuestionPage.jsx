@@ -1,6 +1,6 @@
 // 감정-이성 균형 테스트 전체 코드 (공유 기능 제거됨)
 
-import React, /{ useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const questions = [
   { id: 1, text: "나는 타인의 기분 변화를 빠르게 알아차리는 편이다.", type: "emotion" },
@@ -134,7 +134,7 @@ const QuestionPage = () => {
 
     return (
       <div className="max-w-xl mx-auto p-6 text-center">
-        <h2 className="text-2xl font-bold mb-4">당신의 결과는...</h2>
+        <h2 className="text-2xl font-bold mb-4">당신의 결과는..</h2>
         <p className="text-xl mb-2">{result.resultType}</p>
         <p className="text-sm text-gray-500 mb-2">(감정 점수: {result.emotionScore}, 이성 점수: {result.reasonScore})</p>
 
@@ -178,7 +178,7 @@ const QuestionPage = () => {
       {currentIndex === 0 && (
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold mb-2">감정과 이성의 균형을 찾아서</h1>
-          <p className="text-gray-600 text-base">당신의 내면은 어디쯤에 머무르고 있나요?</p>
+          <p className="text-gray-600 text-base">당신의 내면은 어디에 머무르고 있나요?</p>
         </div>
       )}
 
@@ -206,3 +206,4 @@ const QuestionPage = () => {
 };
 
 export default QuestionPage;
+
